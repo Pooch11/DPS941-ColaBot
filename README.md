@@ -87,10 +87,15 @@ Connect your laptop to the BeagleBone SSID, and go through the process of creati
 The default password for the connection is: BeagleBone 
 
 To have internet connection - you can have your beaglebone connect to the internet with  > connmanctl
-`connmanctl > agent on`
-`connmanctl > scan wifi`
-`connmanctl > services`
-`connmanctl > connect [_____Key Token Here_______]`
+
+``connmanctl > agent on``
+
+``connmanctl > scan wifi``
+
+``connmanctl > services``
+
+``connmanctl > connect [_____Key Token Here_______]``
+
 
 ## Configuring Visual Studios
 
