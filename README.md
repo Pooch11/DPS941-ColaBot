@@ -1,4 +1,5 @@
 # This is the DPS941 Robot - Colaberative repo
+
 Members
 ## Robotics Group 5
 Adam
@@ -10,11 +11,11 @@ Kevin
 Vimal
 
 
-#### Robot C Download Link
+### Robot C Download Link
 
 http://www.robotc.net/download/arduino/ 
 
-#### Other Links 
+### Other Links 
 
 Login and make and account
 https://www.vexrobotics.com/customer/account/login/
@@ -22,7 +23,7 @@ https://www.vexrobotics.com/customer/account/login/
 BeagleBone Model
 https://www.digikey.com/products/en?lang=en&site=us&KeyWords=BBBWL-SC-562-ND
 
-### Getting the board ready
+## Getting the board ready
 
 
 
@@ -91,7 +92,7 @@ To have internet connection - you can have your beaglebone connect to the intern
 `connmanctl > services`
 `connmanctl > connect [_____Key Token Here_______]`
 
-#### Configuring Visual Studios
+## Configuring Visual Studios
 
 Ensure you have the latest packages to deploy onto a ARM (Linux) system.
 
