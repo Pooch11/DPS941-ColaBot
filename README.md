@@ -112,7 +112,16 @@ Your host name should be something like 192.168.8.1 and enter in any other crede
 
 Note : to check your ip open a command prompt and type 'ipconfig' - you will see your default gateway has changed (since we are connected to the Bone)
 
+## Configure the UART ports (WIP)
 
+`` cd /boot``
+
+`` sudo nano uEnv.txt``
+
+Add this line to this file and save
+``cape_enable=capemgr.enable_partno=BB-UART1 ,BB-UART2, BB-UART4, BB-UART5``
+
+Reboot the BeagleBone
 
 
 
