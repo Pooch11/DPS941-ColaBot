@@ -17,11 +17,17 @@ http://www.robotc.net/download/arduino/
 
 ### Other Links 
 
-Login and make and account
+Login and make and account for RobotC IDE
+
 https://www.vexrobotics.com/customer/account/login/
 
 BeagleBone Model
+
 https://www.digikey.com/products/en?lang=en&site=us&KeyWords=BBBWL-SC-562-ND
+
+Debian Images
+
+https://beagleboard.org/latest-images
 
 ## Getting the board ready
 
@@ -126,14 +132,8 @@ Note : to check your ip open a command prompt and type 'ipconfig' - you will see
 
 ## Configure the UART ports (WIP)
 
-`` cd /boot``
+When configuring the board with ``dtb=am335x-boneblack-wireless-roboticscape.dtb`` all UART ports were open.
 
-`` sudo nano uEnv.txt``
-
-Add this line to this file and save
-``cape_enable=capemgr.enable_partno=BB-UART1 ,BB-UART2, BB-UART4, BB-UART5``
-
-Reboot the BeagleBone
 
 
 
