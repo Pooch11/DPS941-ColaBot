@@ -25,13 +25,30 @@ https://www.digikey.com/products/en?lang=en&site=us&KeyWords=BBBWL-SC-562-ND
 
 ## Getting the board ready
 
+After getting the latest image of debian (this readme was done with debian 9.6 Oct 5 edition)
+``cd /boot``
 
+``sudo nano uEnv.txt``
+
+Change the dtb to:
+``#dtb= `` to 
+``dtb=am335x-boneblack-wireless-roboticscape.dtb``
+
+###Set up some internet in order to install the latest packages. Namely zip and gdb.
 
 SSH into the BBB using root@192.168.7.2  <-- this is the default USB IP address for your BBB
 
 >> ifconfig 
 
 ensure that you can see all interface channels on the board (usb0 , usb1, eth0, wlan0)
+
+>> ls -l /dev/ttyO*
+
+>> $ /dev/ttyO4 -> ttyS4 (one for each available uart port on your board)
+
+
+
+you should have an output that looks like this:
 
 STEP1:
 
@@ -41,15 +58,18 @@ From the connmanctl prompt, type in the following commands:
 
 -- tether wifi disable
 
--- agent on
+To have internet connection - you can have your beaglebone connect to the internet with  > connmanctl
 
--- scan wifi
+``connmanctl > agent on``
 
--- services
+``connmanctl > scan wifi``
 
-<Find your home router and copy the service tag key>
+``connmanctl > services``
 
--- connect <paste the service tag key>
+``connmanctl > connect [_____Key Token Here_______]``
+
+<Find your home router and copy the service tag key>. You can later link to the BeagleBone in order to restore internet access to your device.
+      
 
 NOTE:  This will connect your BBB wireless to your home router giving the BBB internet access
 
@@ -86,15 +106,7 @@ Connect your laptop to the BeagleBone SSID, and go through the process of creati
 
 The default password for the connection is: BeagleBone 
 
-To have internet connection - you can have your beaglebone connect to the internet with  > connmanctl
 
-``connmanctl > agent on``
-
-``connmanctl > scan wifi``
-
-``connmanctl > services``
-
-``connmanctl > connect [_____Key Token Here_______]``
 
 
 ## Configuring Visual Studios
