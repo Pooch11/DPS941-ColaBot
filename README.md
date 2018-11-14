@@ -30,9 +30,13 @@ Debian Images
 https://beagleboard.org/latest-images
 
 ## Getting the board ready
-# Latest update
+
+With Debian Image 2018-10-01 flash the board and restart
 
 ### Run this command
+
+Check the version
+
 debian@beaglebone:~$ sudo /opt/scripts/tools/version.sh
 ### Output
 ```
@@ -98,22 +102,29 @@ dmesg | grep gpio-of-helper
 END
 ```
 
-### Next we ground the pin
+### If your wlan0 is not showing up you need to do these additional steps
 
-Next we need to get wlan0 up again
-Get a jumper cable and connect GND to TP1 then
+Get a jumper cable wire and connect GND to TP1 then
 
-sudo dd if=/opt/scripts/device/bone/bbbw-eeprom.dump of=/sys/devices/platform/ocp/44e0b000.i2c/i2c-0/0-0050/eeprom 
+``sudo dd if=/opt/scripts/device/bone/bbbw-eeprom.dump of=/sys/devices/platform/ocp/44e0b000.i2c/i2c-0/0-0050/eeprom ``
 
-sudo reboot and everything will be okay.. 
-
-### On start up
+``sudo reboot``
 
 Disconnect the wire
 
-sudo config-pin P9.11 uart
 
-sudo config-pin P9.13 uart
+### Configure pins for uart protocol
+
+``sudo config-pin P9.11 uart``
+
+``sudo config-pin P9.13 uart``
+
+## Run code on RobotC
+
+Configure the robot c code from this repo to communicate properly with these pins 
+
+While RobotC is broadcasting - use the cat command to see if the output is being received.
+![img](https://i.imgur.com/Fhaj1Yc.png)
 
 ### Set up some internet in order to install the latest packages. Namely zip and gdb in order to execute code remotely.
 
@@ -128,6 +139,7 @@ ensure that you can see all interface channels on the board (usb0 , usb1, eth0, 
 >> $ /dev/ttyO4 -> ttyS4 (one for each available uart port on your board)
 
 you should have an output that looks like this:
+
 ![ttyO*](https://i.imgur.com/TGbXa8T.png)
 
 STEP1:
