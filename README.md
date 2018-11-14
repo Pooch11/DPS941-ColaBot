@@ -30,17 +30,92 @@ Debian Images
 https://beagleboard.org/latest-images
 
 ## Getting the board ready
+# Latest update
 
-After getting the latest image of debian (this readme was done with debian 9.6 Oct 5 edition)
-``cd /boot``
+### Run this command
+debian@beaglebone:~$ sudo /opt/scripts/tools/version.sh
+### Output
+```
+git:/opt/scripts/:[1aa73453b2c980b75e31e83dab7dd8b6696f10c7]
+]eprom:[A335BNLT▒O
+model:[TI_AM335x_BeagleBone_Black]
+dogtag:[BeagleBoard.org Debian Image 2018-10-01]
+bootloader:[eMMC-(default)]:[/dev/mmcblk1]:[U-Boot 2018.09-00002-g0b54a51eee]:[location: dd MBR
+kernel:[4.4.113-ti-r149]
+nodejs:[v4.9.1]
+device-tree-override:[dtb=]
+uboot_overlay_options:[enable_uboot_overlays=1]
+uboot_overlay_options:[uboot_overlay_pru=/lib/firmware/AM335X-PRU-RPROC-4-4-TI-00A0.dtbo]
+uboot_overlay_options:[enable_uboot_cape_universal=1]
+pkg check: to individually upgrade run: [sudo apt install --only-upgrade <pkg>]
+pkg:[bb-cape-overlays]:[4.4.20180928.0-0rcnee0~jessie+20180928]
+pkg:[bb-wl18xx-firmware]:[1.20180517-0rcnee0~jessie+20180517]
+pkg:[kmod]:[18-3rcnee1~jessie+20171005]
+pkg:[roboticscape]:[0.3.4-git20170602-0rcnee4~jessie+20171108]:[GOT_REPLACED_BY_NEXT]
+WARNING:pkg:[librobotcontrol]:[NOT_INSTALLED]
+pkg:[firmware-ti-connectivity]:[20170823-1rcnee1~jessie+20180328]
+groups:[debian : debian adm kmem dialout cdrom floppy audio dip video plugdev users systemd-jou
+cmdline:[console=ttyO0,115200n8 bone_capemgr.uboot_capemgr_enabled=1 root=/dev/mmcblk1p1 ro roo
+dmesg | grep pinctrl-single
+[    1.193856] pinctrl-single 44e10800.pinmux: 142 pins at pa f9e10800 size 568
+dmesg | grep gpio-of-helper
+[    1.194910] gpio-of-helper ocp:cape-universal: Allocated GPIO id=0
+[    1.195525] gpio-of-helper ocp:cape-universal: Allocated GPIO id=1
+[    1.195683] gpio-of-helper ocp:cape-universal: Allocated GPIO id=2
+[    1.195824] gpio-of-helper ocp:cape-universal: Allocated GPIO id=3
+[    1.195975] gpio-of-helper ocp:cape-universal: Allocated GPIO id=4
+[    1.196113] gpio-of-helper ocp:cape-universal: Allocated GPIO id=5
+[    1.196252] gpio-of-helper ocp:cape-universal: Allocated GPIO id=6
+[    1.196398] gpio-of-helper ocp:cape-universal: Allocated GPIO id=7
+[    1.196575] gpio-of-helper ocp:cape-universal: Allocated GPIO id=8
+[    1.196728] gpio-of-helper ocp:cape-universal: Allocated GPIO id=9
+[    1.196866] gpio-of-helper ocp:cape-universal: Allocated GPIO id=10
+[    1.197005] gpio-of-helper ocp:cape-universal: Allocated GPIO id=11
+[    1.197157] gpio-of-helper ocp:cape-universal: Allocated GPIO id=12
+[    1.197298] gpio-of-helper ocp:cape-universal: Allocated GPIO id=13
+[    1.197437] gpio-of-helper ocp:cape-universal: Allocated GPIO id=14
+[    1.197581] gpio-of-helper ocp:cape-universal: Allocated GPIO id=15
+[    1.197724] gpio-of-helper ocp:cape-universal: Allocated GPIO id=16
+[    1.197880] gpio-of-helper ocp:cape-universal: Allocated GPIO id=17
+[    1.198021] gpio-of-helper ocp:cape-universal: Allocated GPIO id=18
+[    1.198167] gpio-of-helper ocp:cape-universal: Allocated GPIO id=19
+[    1.198317] gpio-of-helper ocp:cape-universal: Allocated GPIO id=20
+[    1.198502] gpio-of-helper ocp:cape-universal: Allocated GPIO id=21
+[    1.198645] gpio-of-helper ocp:cape-universal: Allocated GPIO id=22
+[    1.198793] gpio-of-helper ocp:cape-universal: Allocated GPIO id=23
+[    1.199250] gpio-of-helper ocp:cape-universal: Allocated GPIO id=24
+[    1.199433] gpio-of-helper ocp:cape-universal: Allocated GPIO id=25
+[    1.199592] gpio-of-helper ocp:cape-universal: Allocated GPIO id=26
+[    1.199738] gpio-of-helper ocp:cape-universal: Allocated GPIO id=27
+[    1.199892] gpio-of-helper ocp:cape-universal: Allocated GPIO id=28
+[    1.200040] gpio-of-helper ocp:cape-universal: Allocated GPIO id=29
+[    1.200184] gpio-of-helper ocp:cape-universal: Allocated GPIO id=30
+[    1.200337] gpio-of-helper ocp:cape-universal: Allocated GPIO id=31
+[    1.200473] gpio-of-helper ocp:cape-universal: Allocated GPIO id=32
+[    1.200602] gpio-of-helper ocp:cape-universal: Allocated GPIO id=33
+[    1.200739] gpio-of-helper ocp:cape-universal: Allocated GPIO id=34
+[    1.200750] gpio-of-helper ocp:cape-universal: ready
+END
+```
 
-``sudo nano uEnv.txt``
+### Next we ground the pin
 
-Change the dtb to:
-``#dtb= `` to 
-``dtb=am335x-boneblack-wireless-roboticscape.dtb``
+Next we need to get wlan0 up again
+Get a jumper cable and connect GND to TP1 then
 
-###Set up some internet in order to install the latest packages. Namely zip and gdb.
+sudo dd if=/opt/scripts/device/bone/bbbw-eeprom.dump of=/sys/devices/platform/ocp/44e0b000.i2c/i2c-0/0-0050/eeprom 
+
+sudo reboot and everything will be okay.. 
+
+### On start up
+
+Disconnect the wire
+
+sudo config-pin P9.11 uart
+
+sudo config-pin P9.13 uart
+
+### Set up some internet in order to install the latest packages. Namely zip and gdb in order to execute code remotely.
 
 SSH into the BBB using root@192.168.7.2  <-- this is the default USB IP address for your BBB
 
@@ -52,9 +127,8 @@ ensure that you can see all interface channels on the board (usb0 , usb1, eth0, 
 
 >> $ /dev/ttyO4 -> ttyS4 (one for each available uart port on your board)
 
-
-
 you should have an output that looks like this:
+![ttyO*](https://imgur.com/a/KqyJHkn " ")
 
 STEP1:
 
@@ -129,27 +203,9 @@ Tools >
 Your host name should be something like 192.168.8.1 and enter in any other credentials for logging in
 
 
-## Latest update
 
 
-GND TP1 then run as root: 
 
-dd if=/opt/scripts/device/bone/bbbw-eeprom.dump 
-of=/sys/devices/platform/ocp/44e0b000.i2c/i2c-0/0-0050/eeprom 
-
-(that dd line is "1" line not two..) 
-
-reboot and everything will be okay.. 
-
-sudo config-pin P9.11 uart
-sudo config-pin P9.13 uart
-
-
-Note : to check your ip open a command prompt and type 'ipconfig' - you will see your default gateway has changed (since we are connected to the Bone)
-
-## Configure the UART ports (WIP)
-
-When configuring the board with ``dtb=am335x-boneblack-wireless-roboticscape.dtb`` all UART ports were open.
 
 
 
