@@ -37,9 +37,9 @@ https://rcn-ee.com/rootfs/bb.org/testing/2018-10-01/lxqt-4gb/BBB-blank-debian-8.
 ### Login
 Credentials: debian Password: temppwd
 
-### Run this command
+### Check this version
 
-Check the version
+Run this command
 
 debian@beaglebone:~$ sudo /opt/scripts/tools/version.sh
 ### Output
