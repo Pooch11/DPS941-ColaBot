@@ -114,6 +114,10 @@ Get a jumper cable wire and connect GND to TP1 then
 
 ``sudo reboot``
 
+Should give you something like this
+
+![Output](https://i.imgur.com/sZGijRg.png)
+
 Disconnect the wire
 
 ### Check Ports
