@@ -141,7 +141,7 @@ Configure the robot c code from this repo (TelemetryCode.c) to communicate prope
 While RobotC is broadcasting - use the cat command to see if the output is being received.
 ![img](https://i.imgur.com/Fhaj1Yc.png)
 
-### To install the latest packages. Namely zip and gdb in order to execute code remotely.
+### Install the latest packages. Namely zip and gdb - needed to execute code remotely via Visual Studios.
 
 We need internet connectivity on the Beagle Bone.
 SSH into the BBB using root@192.168.7.2  <-- this is the default USB IP address for your BBB
