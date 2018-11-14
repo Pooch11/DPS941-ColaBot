@@ -1,6 +1,5 @@
 # This is the DPS941 Robot - Colaberative repo
 
-Members
 ## Robotics Group 5
 Adam
 
@@ -32,6 +31,9 @@ https://beagleboard.org/latest-images
 ## Getting the board ready
 
 With Debian Image 2018-10-01 flash the board and restart
+
+### Login
+Credentials: debian Password: temppwd
 
 ### Run this command
 
@@ -112,6 +114,13 @@ Get a jumper cable wire and connect GND to TP1 then
 
 Disconnect the wire
 
+### Check Ports
+
+`` ls -l /dev/ttyO*``
+
+you should have an output that looks like this:
+
+![ttyO*](https://i.imgur.com/TGbXa8T.png)
 
 ### Configure pins for uart protocol
 
@@ -126,21 +135,14 @@ Configure the robot c code from this repo to communicate properly with these pin
 While RobotC is broadcasting - use the cat command to see if the output is being received.
 ![img](https://i.imgur.com/Fhaj1Yc.png)
 
-### Set up some internet in order to install the latest packages. Namely zip and gdb in order to execute code remotely.
+### To install the latest packages. Namely zip and gdb in order to execute code remotely.
 
+We need internet connectivity on the Beagle Bone.
 SSH into the BBB using root@192.168.7.2  <-- this is the default USB IP address for your BBB
 
 >> ifconfig 
 
 ensure that you can see all interface channels on the board (usb0 , usb1, eth0, wlan0)
-
->> ls -l /dev/ttyO*
-
->> $ /dev/ttyO4 -> ttyS4 (one for each available uart port on your board)
-
-you should have an output that looks like this:
-
-![ttyO*](https://i.imgur.com/TGbXa8T.png)
 
 STEP1:
 
@@ -160,10 +162,7 @@ To have internet connection - you can have your beaglebone connect to the intern
 
 ``connmanctl > connect [_____Key Token Here_______]``
 
-<Find your home router and copy the service tag key>. You can later link to the BeagleBone in order to restore internet access to your device.
-      
-
-NOTE:  This will connect your BBB wireless to your home router giving the BBB internet access
+<Find your home router or hotspot and copy the service tag key>. You can later link to the BeagleBone in order to restore internet access to your device.
 
 STEP2:
 
@@ -197,8 +196,6 @@ STEP6:
 Connect your laptop to the BeagleBone SSID, and go through the process of creating a cross-compiler remote connection with Visual Studio.
 
 The default password for the connection is: BeagleBone 
-
-
 
 
 ## Configuring Visual Studios
