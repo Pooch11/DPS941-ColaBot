@@ -130,7 +130,7 @@ you should have an output that looks like this:
 
 ## Run code on RobotC
 
-Configure the robot c code from this repo to communicate properly with these pins 
+Configure the robot c code from this repo (TelemetryCode.c) to communicate properly with these pins 
 
 While RobotC is broadcasting - use the cat command to see if the output is being received.
 ![img](https://i.imgur.com/Fhaj1Yc.png)
@@ -209,7 +209,9 @@ Tools >
               Cross Platfrom > 
                              Connection Manager
 
-Your host name should be something like 192.168.8.1 and enter in any other credentials for logging in
+Your host name should be something like 192.168.8.1 and enter in any other needed credentials for logging in
+
+You should be able to run UartConnection.cpp on the beaglebone.
 
 
 
