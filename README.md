@@ -31,6 +31,7 @@ https://beagleboard.org/latest-images
 ## Getting the board ready
 
 With Debian Image 2018-10-01 flash the board and restart
+
 https://rcn-ee.com/rootfs/bb.org/testing/2018-10-01/lxqt-4gb/BBB-blank-debian-8.11-lxqt-4gb-armhf-2018-10-01-4gb.img.xz
 
 ### Login
