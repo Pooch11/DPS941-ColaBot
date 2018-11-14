@@ -128,7 +128,7 @@ ensure that you can see all interface channels on the board (usb0 , usb1, eth0, 
 >> $ /dev/ttyO4 -> ttyS4 (one for each available uart port on your board)
 
 you should have an output that looks like this:
-![ttyO*](https://imgur.com/TGbXa8T " ")
+![ttyO*](https://imgur.com/a/KqyJHkn)
 
 STEP1:
 
