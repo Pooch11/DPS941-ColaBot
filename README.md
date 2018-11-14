@@ -128,6 +128,23 @@ Tools >
 
 Your host name should be something like 192.168.8.1 and enter in any other credentials for logging in
 
+
+## Latest update
+
+
+GND TP1 then run as root: 
+
+dd if=/opt/scripts/device/bone/bbbw-eeprom.dump 
+of=/sys/devices/platform/ocp/44e0b000.i2c/i2c-0/0-0050/eeprom 
+
+(that dd line is "1" line not two..) 
+
+reboot and everything will be okay.. 
+
+sudo config-pin P9.11 uart
+sudo config-pin P9.13 uart
+
+
 Note : to check your ip open a command prompt and type 'ipconfig' - you will see your default gateway has changed (since we are connected to the Bone)
 
 ## Configure the UART ports (WIP)
