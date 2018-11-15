@@ -219,6 +219,7 @@ Your host name should be something like 192.168.8.1 and enter in any other neede
 
 You should be able to run UartConnection.cpp on the beaglebone.
 
+All of the working files are located in the working file folder. The robot can be teleoperated to start and stop driving with the command 1, but the robot's telemetry feedback is messed up. Need to work on this feedback since its crucial to the rest of the telemetry.
 
 
 
