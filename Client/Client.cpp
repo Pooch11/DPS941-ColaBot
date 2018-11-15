@@ -9,22 +9,43 @@
 #include <errno.h>
 #include <arpa/inet.h> 
 #include <iostream>
+int EstablishConnection(sockaddr_in client_addr);
 
 int main(int argc, char *argv[])
 {
-	int sockfd = 0, n = 0;
-	char recvBuff[1024];
+	char recvBuff[1];
+	char sendBuff[1];
+	int sockfd = 0;
 	struct sockaddr_in client_addr;
 
-	if (argc > 5)
-	{
-		std::cout << "\n Usage: %s 192.168.8.1 \n" << argv[0] << std::endl;
-		std::cin.get();
-		std::cin.get();
-		return 1;
+	memset(recvBuff, '0', sizeof(recvBuff));
+	memset(sendBuff, 'A', sizeof(sendBuff));
+	
+	sockfd = EstablishConnection(client_addr);
+
+	while (sockfd != -1) {
+		std::cout << "Enter a command" << std::endl;
+		std::cin >> sendBuff;
+		write(sockfd, sendBuff, sizeof(sendBuff));
+		memset(sendBuff, '0', sizeof(sendBuff));
+
+		read(sockfd, recvBuff, sizeof(recvBuff));
+		std::cout << "You received this message: " << std::endl;
+		std::cout << recvBuff << std::endl;
+		memset(recvBuff, '0', sizeof(recvBuff));
 	}
 
-	memset(recvBuff, '0', sizeof(recvBuff));
+
+	
+	
+	std::cerr << recvBuff << std::endl;
+	std::cin.get();
+	std::cin.get();
+	return 0;
+}
+
+int EstablishConnection(sockaddr_in client_addr) {
+	int sockfd = 0;
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 	{
 		std::cout << "Error : Could not create socket" << std::endl;
@@ -45,7 +66,6 @@ int main(int argc, char *argv[])
 		std::cin.get();
 		return 1;
 	}
-
 	if (connect(sockfd, (struct sockaddr *)&client_addr, sizeof(client_addr)) < 0)
 	{
 		std::cout << "Error : Connect Failed \n" << std::endl;
@@ -53,24 +73,7 @@ int main(int argc, char *argv[])
 		std::cin.get();
 		return 1;
 	}
-
-	while ((n = read(sockfd, recvBuff, sizeof(recvBuff) - 1)) > 0)
-	{
-		recvBuff[n] = 0;
-		if (fputs(recvBuff, stdout) == EOF)
-		{
-			std::cout << " Error : Fputs error" << std::endl;
-			std::cin.get();
-			std::cin.get();
-		}
-	}
-
-	if (n < 0)
-	{
-		printf("\n Read error \n");
-	}
 	std::cout << "Connection established" << std::endl;
-	std::cin.get();
-	std::cin.get();
-	return 0;
+	return sockfd;
 }
+
