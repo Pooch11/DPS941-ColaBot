@@ -69,7 +69,8 @@ int main(void) {
 	struct sockaddr_in serv_addr;
 	welcomeSocket = socket(AF_INET, SOCK_STREAM, 0);
 	memset(&serv_addr, '0', sizeof(serv_addr));
-	memset(sendBuff, '0', sizeof(sendBuff));
+	memset(read_buffer, '0', sizeof(read_buffer));
+	memset(write_buffer, '0', sizeof(write_buffer));
 
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -114,12 +115,35 @@ int main(void) {
 			std::cout << "Client Connected" << std::endl;
 			while (uart_stream != -1)
 			{
+				//RxBytes(uart_stream, read_buffer, sizeof(read_buffer));
+				//std::cout << read_buffer << std::endl;
+
+				
+				read(connectionSocket, write_buffer, sizeof(write_buffer));
+				std::cout << write_buffer << std::endl;
+				TxBytes(uart_stream, write_buffer, sizeof(write_buffer));
+
+				RxBytes(uart_stream, read_buffer, sizeof(read_buffer));
+				write(connectionSocket, read_buffer, sizeof(read_buffer));
+				std::cout << read_buffer << std::endl;
+				
+				memset(read_buffer, '0', sizeof(read_buffer));
+				memset(write_buffer, '0', sizeof(write_buffer));
+
+				read(connectionSocket, write_buffer, sizeof(write_buffer));
+				std::cout << write_buffer << std::endl;
+				TxBytes(uart_stream, write_buffer, sizeof(write_buffer));
+				
+				
 				RxBytes(uart_stream, read_buffer, sizeof(read_buffer));
 				std::cout << read_buffer << std::endl;
-				read(connectionSocket, write_buffer, sizeof(write_buffer));
 				write(connectionSocket, read_buffer, sizeof(read_buffer));
+
+				memset(read_buffer, '0', sizeof(read_buffer));
+				memset(write_buffer, '0', sizeof(write_buffer));
+				
 				//std::cin >> write_buffer;
-				TxBytes(uart_stream, write_buffer, sizeof(write_buffer));
+				
 			}
 		}
 	}
