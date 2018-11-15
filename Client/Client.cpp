@@ -14,36 +14,43 @@ int main(int argc, char *argv[])
 {
 	int sockfd = 0, n = 0;
 	char recvBuff[1024];
-	struct sockaddr_in serv_addr;
+	struct sockaddr_in client_addr;
 
-	if (argc != 2)
+	if (argc > 5)
 	{
-		printf("\n Usage: %s 192.168.7.2 \n", argv[0]);
+		std::cout << "\n Usage: %s 192.168.8.1 \n" << argv[0] << std::endl;
+		std::cin.get();
+		std::cin.get();
 		return 1;
 	}
 
 	memset(recvBuff, '0', sizeof(recvBuff));
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 	{
-		printf("\n Error : Could not create socket \n");
+		std::cout << "Error : Could not create socket" << std::endl;
+		std::cin.get();
+		std::cin.get();
 		return 1;
 	}
 
-	memset(&serv_addr, '0', sizeof(serv_addr));
+	memset(&client_addr, '0', sizeof(client_addr));
 
-	serv_addr.sin_family = AF_INET;
-	serv_addr.sin_addr.s_addr = inet_addr("192.168.7.2"); //Change the ip address when adam comes
-	serv_addr.sin_port = htons(5000);
+	client_addr.sin_family = AF_INET;
+	client_addr.sin_port = htons(5000);
 
-	if (inet_pton(AF_INET, argv[1], &serv_addr.sin_addr) <= 0)
+	if (inet_pton(AF_INET, "192.168.8.1", &client_addr.sin_addr) <= 0)
 	{
-		printf("\n inet_pton error occured\n");
+		std::cout << "error occured" << std::endl;
+		std::cin.get();
+		std::cin.get();
 		return 1;
 	}
 
-	if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+	if (connect(sockfd, (struct sockaddr *)&client_addr, sizeof(client_addr)) < 0)
 	{
-		printf("\n Error : Connect Failed \n");
+		std::cout << "Error : Connect Failed \n" << std::endl;
+		std::cin.get();
+		std::cin.get();
 		return 1;
 	}
 
@@ -52,10 +59,9 @@ int main(int argc, char *argv[])
 		recvBuff[n] = 0;
 		if (fputs(recvBuff, stdout) == EOF)
 		{
-			printf("\n Error : Fputs error\n");
-		}
-		else {
-			std::cout << recvBuff << std::endl;
+			std::cout << " Error : Fputs error" << std::endl;
+			std::cin.get();
+			std::cin.get();
 		}
 	}
 
@@ -63,6 +69,8 @@ int main(int argc, char *argv[])
 	{
 		printf("\n Read error \n");
 	}
-
+	std::cout << "Connection established" << std::endl;
+	std::cin.get();
+	std::cin.get();
 	return 0;
 }
