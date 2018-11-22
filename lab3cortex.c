@@ -1,4 +1,3 @@
-
 #pragma config(I2C_Usage, I2C1, i2cSensors)
 #pragma config(Sensor, in1,    clawLimit,      sensorPotentiometer)
 #pragma config(Sensor, in2,    lineRIGHT,      sensorReflection)
@@ -26,6 +25,8 @@
 #define PORT "/dev/ttyO4"
 #define BAUDRATE B115200
 
+
+
 struct Data
 {
 	short SonarValue;
@@ -36,23 +37,43 @@ struct Data
 	int Batt;
 };
 
-char value;
+bool frontFlag = false;
+bool clawUp =false;
+bool isTurning = false;
+char rcvInput  = '0';
 
 Data TxPkt;
+
+task frontCheck(){
+
+
+	while(true){
+		int sensorCheck = SensorValue[sonarSensor];
+		if(sensorCheck <= 15){
+			frontFlag = true;
+		stopAllMotors();
+		}
+		else{
+			frontFlag = false;
+		}
+		wait1Msec(2000);
+		continue;
+	}
+
+}
+
 task UARTRx() {
 	//Receiving Data
-	int rcvChar;		//Variable to hold the reciving byte data
+	char rcvChar;		//Variable to hold the reciving byte data
 
 	while (true)
 	{
 		rcvChar = getChar(uartOne);
-		if (rcvChar != '1')
-		{
-			// No character available
-	 		wait1Msec(3);
-	 		continue;
-		}
-		if(rcvChar == '1' && TxPkt.Drive == false)
+		rcvInput = rcvChar;
+		wait1Msec(3);
+	 	continue;
+
+	/*	if(rcvChar == '1' && TxPkt.Drive == false)
 		{
 			TxPkt.Drive = true;
 			motor[leftMotor] = 35;
@@ -61,7 +82,7 @@ task UARTRx() {
 				TxPkt.Drive = false;
 			motor[leftMotor] = 0;
 			motor[rightMotor] = 0;
-		}
+		}*/
 	}
 }
 
@@ -74,18 +95,118 @@ task main()
 	TxPkt.ClawClosed = true;
 	TxPkt.Batt = 100;
 	startTask(UARTRx);
-
+	startTask(frontCheck);
 //Sending Data
 
 		char *ptr = (char *)&TxPkt;
 while(true) {
-		if (TxPkt.Drive == true) {
-			value = '1';
-		sendChar(uartOne, value);
-	} else if (TxPkt.Drive == false) {
-			value = '0';
-		sendChar(uartOne, value);
-	}
+
+		while(frontFlag == false){
+			switch(rcvInput){
+				case '1' :
+						stopAllMotors();
+      			isTurning = false;
+      			if (TxPkt.Drive == true) {
+							stopAllMotors();
+							TxPkt.Drive = false;
+						}else if (TxPkt.Drive == false) {
+							motor[leftMotor] = 35;
+							motor[rightMotor] = 35;
+							TxPkt.Drive = true;
+						}
+					rcvInput ='0';
+					break;
+      	case '2' :
+      			stopAllMotors();
+      			isTurning = false;
+      			if (TxPkt.Drive == true) {
+							stopAllMotors();
+							TxPkt.Drive = false;
+						}else if (TxPkt.Drive == false) {
+							motor[leftMotor] = -35;
+							motor[rightMotor] = -35;
+							TxPkt.Drive = true;
+						}
+						rcvInput ='0';
+						break;
+      	case '3' :
+         		stopAllMotors();
+         		TxPkt.Drive = false;
+
+         		if(isTurning == false){
+         			motor[rightMotor] = 35;
+         			isTurning = true;
+         		}else if(isTurning == true){
+         			stopAllMotors();
+         			isTurning = false;
+         		}
+         		rcvInput ='0';
+         	break;
+      	case '4' :
+         		stopAllMotors();
+         		TxPkt.Drive = false;
+         		if(isTurning == false){
+         			motor[leftMotor] = 35;
+         			isTurning = true;
+         		}else if(isTurning == true){
+         			stopAllMotors();
+         			isTurning = false;
+         		}
+         		rcvInput ='0';
+         	break;
+      	default :
+
+			}
+		}
+
+			switch(rcvInput){
+				case '1' :
+         stopAllMotors();
+         TxPkt.Drive = false;
+         rcvInput ='0';
+         break;
+      	case '2' :
+      			stopAllMotors();
+      			isTurning = false;
+      			if (TxPkt.Drive == true) {
+							stopAllMotors();
+							TxPkt.Drive = false;
+						}else if (TxPkt.Drive == false) {
+							motor[leftMotor] = -35;
+							motor[rightMotor] = -35;
+							TxPkt.Drive = true;
+						}
+						rcvInput ='0';
+					break;
+      	case '3' :
+         		stopAllMotors();
+         		TxPkt.Drive = false;
+
+         		if(isTurning == false){
+         			motor[rightMotor] = 35;
+         			isTurning = true;
+         		}else if(isTurning == true){
+         			stopAllMotors();
+         			isTurning = false;
+         		}
+         		rcvInput ='0';
+         	break;
+      	case '4' :
+         		stopAllMotors();
+         		TxPkt.Drive = false;
+         		if(isTurning == false){
+         			motor[leftMotor] = 35;
+         			isTurning = true;
+         		}else if(isTurning == true){
+         			stopAllMotors();
+         			isTurning = false;
+         		}
+         		rcvInput ='0';
+         	break;
+      	default :
+         	stopAllMotors();
+
+		}
 }
 
 	/*
