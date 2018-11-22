@@ -36,22 +36,57 @@ struct Data
 	bool ClawClosed;
 	int Batt;
 };
-
+int MOTORPOWER = 35;
+int CLAWPOWER = 45; //claw electrical power
+int ARMPOWER = 35; //arm electrical power
 bool frontFlag = false;
-bool clawUp =false;
+bool armUp =false;
+bool clawOpen =false;
 bool isTurning = false;
 char rcvInput  = '0';
 
 Data TxPkt;
 
+void openClaw(){
+		wait1Msec(500);
+		motor[clawMotor] = CLAWPOWER;
+		wait1Msec(650);
+		motor[clawMotor] = 0;
+	}
+	//Close claw and stop motor
+void closeClaw(){
+		motor[clawMotor] = -CLAWPOWER;
+		wait1Msec(600);
+		motor[clawMotor] = 0;
+}
+
+void liftArm(int d){
+		while (SensorValue[clawLimit] > d){ // claw limit exceeded - dont do anything
+			motor[armMotor] = -ARMPOWER - 10;
+		}
+		motor[armMotor] = 0;
+		wait1Msec(250);
+	}
+
+	//Lower arm until it reaches the bottom
+	void lowerArm(){
+		int tempPos = 0;
+		while (SensorValue[clawLimit] < 4050){
+			tempPos = SensorValue[clawLimit];
+			motor[armMotor] = ARMPOWER;
+			wait1Msec(200);
+		}
+		motor[armMotor] = 0;
+		wait1Msec(500);
+	}
 task frontCheck(){
 
 
 	while(true){
 		int sensorCheck = SensorValue[sonarSensor];
-		if(sensorCheck <= 15){
+		if(sensorCheck > -1 && sensorCheck <= 15){
 			frontFlag = true;
-		stopAllMotors();
+			//stopAllMotors();
 		}
 		else{
 			frontFlag = false;
@@ -101,30 +136,37 @@ task main()
 		char *ptr = (char *)&TxPkt;
 while(true) {
 
-		while(frontFlag == false){
 			switch(rcvInput){
 				case '1' :
-						stopAllMotors();
-      			isTurning = false;
-      			if (TxPkt.Drive == true) {
+						if(frontFlag == false){
 							stopAllMotors();
-							TxPkt.Drive = false;
-						}else if (TxPkt.Drive == false) {
-							motor[leftMotor] = 35;
-							motor[rightMotor] = 35;
-							TxPkt.Drive = true;
-						}
-					rcvInput ='0';
-					break;
-      	case '2' :
+      				isTurning = false;
+      				if (TxPkt.Drive == true) {
+								stopAllMotors();
+								TxPkt.Drive = false;
+							}else if (TxPkt.Drive == false) {
+								motor[leftMotor] = MOTORPOWER;
+								motor[rightMotor] = MOTORPOWER;
+								TxPkt.Drive = true;
+							}
+							rcvInput ='0';
+							break;
+					}
+					else{
+						stopAllMotors();
+         		TxPkt.Drive = false;
+         		rcvInput ='0';
+         		break;
+				}
+      /*	case '2' :
       			stopAllMotors();
       			isTurning = false;
       			if (TxPkt.Drive == true) {
 							stopAllMotors();
 							TxPkt.Drive = false;
 						}else if (TxPkt.Drive == false) {
-							motor[leftMotor] = -35;
-							motor[rightMotor] = -35;
+							motor[leftMotor] = -MOTORPOWER;
+							motor[rightMotor] = -MOTORPOWER;
 							TxPkt.Drive = true;
 						}
 						rcvInput ='0';
@@ -134,7 +176,7 @@ while(true) {
          		TxPkt.Drive = false;
 
          		if(isTurning == false){
-         			motor[rightMotor] = 35;
+         			motor[rightMotor] = MOTORPOWER;
          			isTurning = true;
          		}else if(isTurning == true){
          			stopAllMotors();
@@ -146,7 +188,7 @@ while(true) {
          		stopAllMotors();
          		TxPkt.Drive = false;
          		if(isTurning == false){
-         			motor[leftMotor] = 35;
+         			motor[leftMotor] = MOTORPOWER;
          			isTurning = true;
          		}else if(isTurning == true){
          			stopAllMotors();
@@ -154,75 +196,38 @@ while(true) {
          		}
          		rcvInput ='0';
          	break;
-      	default :
 
-			}
-		}
-
-			switch(rcvInput){
-				case '1' :
-         stopAllMotors();
-         TxPkt.Drive = false;
-         rcvInput ='0';
-         break;
-      	case '2' :
-      			stopAllMotors();
-      			isTurning = false;
-      			if (TxPkt.Drive == true) {
-							stopAllMotors();
-							TxPkt.Drive = false;
-						}else if (TxPkt.Drive == false) {
-							motor[leftMotor] = -35;
-							motor[rightMotor] = -35;
-							TxPkt.Drive = true;
-						}
-						rcvInput ='0';
-					break;
-      	case '3' :
+         	case '5' :
          		stopAllMotors();
+         		isTurning = false;
          		TxPkt.Drive = false;
 
-         		if(isTurning == false){
-         			motor[rightMotor] = 35;
-         			isTurning = true;
-         		}else if(isTurning == true){
-         			stopAllMotors();
-         			isTurning = false;
+         		if(armUp == false){
+         			liftArm(3900);
+         			armUp = true;
+         		}else if(armUp == true){
+         			lowerArm();
+         			armUp = false;
          		}
          		rcvInput ='0';
          	break;
-      	case '4' :
+
+         	case '6' :
          		stopAllMotors();
+         		isTurning = false;
          		TxPkt.Drive = false;
-         		if(isTurning == false){
-         			motor[leftMotor] = 35;
-         			isTurning = true;
-         		}else if(isTurning == true){
-         			stopAllMotors();
-         			isTurning = false;
+         		if(clawOpen == false){
+         			openClaw();
+         			clawOpen = true;
+         		}else if(clawOpen == true){
+         			closeClaw();
+         			clawOpen = false;
          		}
          		rcvInput ='0';
          	break;
+         	*/
       	default :
          	stopAllMotors();
-
+			}
 		}
-}
-
-	/*
-	while(true)
-	{
-		TxPkt.SonarValue = SensorValue(MiddleSonar);
-		TxPkt.ArmValue = SensorValue(armPosition);
-		TxPkt.ClawClosed = SensorValue(
-
-		for(int x=0; x<11; x++)
-			sendChar(uartOne, *(ptr+x));
-
-		wait1Msec(5000);  //5 second bursts of data
-	}*/
-
-
-
-
 }
