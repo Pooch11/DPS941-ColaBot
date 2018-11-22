@@ -118,36 +118,10 @@ int main(void) {
 			std::cout << "Client Connected" << std::endl;
 			while (uart_stream != -1)
 			{
-				//RxBytes(uart_stream, read_buffer, sizeof(read_buffer));
-				//std::cout << read_buffer << std::endl;
-				RxBytes(connectionSocket, read_buffer, sizeof(read_buffer));
-				std::cout << "Message = " << read_buffer << std::endl;
-
-				//read(connectionSocket, write_buffer, sizeof(write_buffer));
-				//std::cout << "Reading from client" << write_buffer << std::endl;
-				//TxBytes(uart_stream, write_buffer, sizeof(write_buffer));
-
-//				RxBytes(uart_stream, read_buffer, sizeof(read_buffer));
-//				write(connectionSocket, read_buffer, sizeof(read_buffer));
-//				std::cout << "Reading from Robot" << read_buffer << std::endl;
-
-				memset(read_buffer, '0', sizeof(read_buffer));
-				//memset(write_buffer, '0', sizeof(write_buffer));
-
-//				read(connectionSocket, write_buffer, sizeof(write_buffer));
-//				std::cout << "Wwrite buff " << write_buffer << std::endl;
-//				TxBytes(uart_stream, write_buffer, sizeof(write_buffer));
-
-
-			//	RxBytes(uart_stream, read_buffer, sizeof(read_buffer));
-			//	std::cout << read_buffer << std::endl;
-			//	write(connectionSocket, read_buffer, sizeof(read_buffer));
-
-				//memset(read_buffer, '0', sizeof(read_buffer));
-				//memset(write_buffer, '0', sizeof(write_buffer));
-
-				//std::cin >> write_buffer;
-
+				read(connectionSocket, write_buffer, sizeof(write_buffer));
+				std::cout << "Wwrite buff " << write_buffer << std::endl;
+				TxBytes(uart_stream, write_buffer, sizeof(write_buffer));
+				memset(write_buffer, '0', sizeof(write_buffer));
 			}
 		}
 	}
